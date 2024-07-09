@@ -1,7 +1,7 @@
 searchFormElement = document.querySelector("#search-form");
 
 function updateWeather(response) {
-    console.log(response.data);
+//    console.log(response.data);
     temperatureElement = document.querySelector("#temperature");
     temperature = response.data.main.temp;
     temperatureElement.innerHTML = Math.round(temperature); // or Math.round(response.data.main.temp). Without the previous step and variable.
@@ -50,7 +50,8 @@ function updateWeather(response) {
     windSpeedElement.innerHTML = `${response.data.wind.speed} km/h`;
 
     let iconElement = document.querySelector("#icon");
-    iconElement.innerHTML = `<img src="${response.data.weather[0].icon}" class="weather-app-icon">`;
+    iconElement.innerHTML = `<img src="https://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png" class="weather-app-icon" />`;
+    console.log(iconElement)
 } 
 
 function searchCity(city) {
