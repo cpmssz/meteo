@@ -48,6 +48,9 @@ function updateWeather(response) {
     
     windSpeedElement = document.querySelector("#wind");
     windSpeedElement.innerHTML = `${response.data.wind.speed} km/h`;
+
+    let iconElement = document.querySelector("#icon");
+    iconElement.innerHTML = `<img src="${response.data.weather[0].icon}" class="weather-app-icon">`;
 } 
 
 function searchCity(city) {
