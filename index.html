@@ -1,53 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link 
-        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" 
-        rel="stylesheet"
-        />
-        <link rel="stylesheet" href="src/index.css">
-        <title>Meteo App</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/index.css" />
+    <title>Meteo App</title>
   </head>
   <body>
-    <header>
-      <form>
-        <input
-          type="search"
-          placeholder="Enter a city"
-          required
-          autofocus="on"
-        />
-        <input type="submit" value="search" />
-      </form>
-      <h1>Welcome to the Meteo App</h1>
-    </header>
-    <main>
-        <div class="weather-app">
-      <div>
-        <h1>City</h1>
-        <p>
-          Tuesday HH:mm scattered clouds
-          <br />
-          Humidity: , Wind:
-        </p>
-      </div>
-      <div>⛅ 20 º C</div>
-    </main>
-    <footer>
-      Coded by
-      <a href="https://github.com/cpmssz" target="_blank">CS</a>, code hosted on
-      <a href="https://github.com/cpmssz/meteo" target="_blank">GitHub</a> and
-      website
-      <a
-        href="https://main--meteorology-weather-app.netlify.app/"
-        target="_blank"
-        >on Netlify</a
-      >
-    </footer>
-</div>
+    <div class="weather-app">
+      <header>
+        <form class="search-form">
+          <input
+            type="search"
+            placeholder="Enter a city"
+            required
+            autofocus="on"
+            class="search-form-input"
+          />
+          <input type="submit" value="search" class="search-form-button" />
+        </form>
+      </header>
+      <main>
+        <div class="weather-app-data">
+          <div>
+            <h1 class="weather-app-city">Paris</h1>
+            <p class="weather-app-details">
+              Tuesday HH:mm scattered clouds
+              <br />
+              Humidity: <strong> 66% </strong> , Wind:
+              <strong> 11 km/h </strong>
+            </p>
+          </div>
+          <div class="weather-app-temperature-container">
+            <div class="weather-app-icon">⛅</div>
+            <div class="weather-app-temperature">20</div>
+            <div class="weather-app-unit">ºC</div>
+          </div>
+        </div>
+      </main>
+      <footer>
+        Coded by
+        <a href="https://github.com/cpmssz" target="_blank">CS</a>, code hosted
+        on
+        <a href="https://github.com/cpmssz/meteo" target="_blank">GitHub</a> and
+        website
+        <a
+          href="https://main--meteorology-weather-app.netlify.app/"
+          target="_blank"
+          >on Netlify</a
+        >
+      </footer>
+    </div>
   </body>
 </html>
