@@ -1,116 +1,103 @@
-searchFormElement = document.querySelector("#search-form");
-
-function updateWeather(response) {
-    console.log(response.data);
-    temperatureElement = document.querySelector("#temperature");
-    temperature = response.data.main.temp;
-    temperatureElement.innerHTML = Math.round(temperature); // or Math.round(response.data.main.temp). Without the previous step and variable.
-
-    cityElement = document.querySelector("#weather-app-city"); // or just #city (week7-Lesson7-typing a city with errors)
-    cityElement.innerHTML =  response.data.name; // searchInput.value; 
-
-    
-    let date = new Date(response.data.dt * 1000); // correct way of converting a Unix timestamp date format to time in Javascript;
-    timeElement = document.querySelector("#time");
-    timeElement.innerHTML = formatDate(date);
-
-    function formatDate(date) {
-
-        let hours = date.getHours();
-        let minutes = date.getMinutes();
-        let day = date.getDay();
-
-        let days = [ 
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday"
-        ]
-        
-        let currentDay = days[day]; // or: let day=days[date.getDay()];
-
-        if (minutes < 10) {
-            minutes = `0${minutes}`;
-          }
-        
-        return `${currentDay} ${hours}:${minutes}`;
-    }        
-
-    descriptionElement = document.querySelector("#description");
-    descriptionElement.innerHTML = response.data.weather[0].description;
-
-    humidityElement = document.querySelector("#humidity");
-    humidityElement.innerHTML = `${response.data.main.humidity}%`;
-
-    
-    windSpeedElement = document.querySelector("#wind");
-    windSpeedElement.innerHTML = `${response.data.wind.speed} km/h`;
-
+function refreshWeather(response) {
+    let temperatureElement = document.querySelector("#temperature");
+    let temperature = response.data.temperature.current;
+    let cityElement = document.querySelector("#city");
+    let descriptionElement = document.querySelector("#description");
+    let humidityElement = document.querySelector("#humidity");
+    let windSpeedElement = document.querySelector("#wind-speed");
+    let timeElement = document.querySelector("#time");
+    let date = new Date(response.data.time * 1000);
     let iconElement = document.querySelector("#icon");
-    iconElement.innerHTML = `<img src="https://openweathermap.org/img/wn/${response.data.weather[0].icon}@2x.png" class="weather-app-icon" />`;
-} 
-
-function searchCity(city) {
-    let apiKey = "e6c2364656962bdcb16bc352fc42569a";
-    let apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-    axios.get(apiUrl).then(updateWeather); 
-}
-    
-
-function handleSearchSubmit(event) {
+  
+    cityElement.innerHTML = response.data.city;
+    timeElement.innerHTML = formatDate(date);
+    descriptionElement.innerHTML = response.data.condition.description;
+    humidityElement.innerHTML = `${response.data.temperature.humidity}%`;
+    windSpeedElement.innerHTML = `${response.data.wind.speed}km/h`;
+    temperatureElement.innerHTML = Math.round(temperature);
+    iconElement.innerHTML = `<img src="${response.data.condition.icon_url}" class="weather-app-icon" />`;
+  
+    getForecast(response.data.city);
+  }
+  
+  function formatDate(date) {
+    let minutes = date.getMinutes();
+    let hours = date.getHours();
+    let days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    let day = days[date.getDay()];
+  
+    if (minutes < 10) {
+      minutes = `0${minutes}`;
+    }
+  
+    return `${day} ${hours}:${minutes}`;
+  }
+  
+  function searchCity(city) {
+    let apiKey = "b2a5adcct04b33178913oc335f405433";
+    let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apiKey}&units=metric`;
+    axios.get(apiUrl).then(refreshWeather);
+  }
+  
+  function handleSearchSubmit(event) {
     event.preventDefault();
-    searchInput = document.querySelector("#search-form-input");
- 
+    let searchInput = document.querySelector("#search-form-input");
+  
     searchCity(searchInput.value);
-}
-
-searchFormElement.addEventListener("click", handleSearchSubmit);
-searchCity("Paris");
-
-function displayForecast() {
-    let forecastElement = document.querySelector("#weather-forecast");
-    
-    let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]; 
-    let forecastHtml = ""; 
-
-    days.forEach(function (day, index) {
-        if (index < 5) {
-            forecastHtml=  
-                forecastHtml +  
-                ` 
-                <div class="weather-forecast-day"> 
-                    <div class="weather-forecast-date">${day}</div>
-                    <img
-                        src="https://openweathermap.org/img/wn/04d@2x.png"
-                        alt=""
-                        width="45"
-                        class="weather-forecast-icon"
-                     />
-                
-                    <div class="weather-forecast-temperatures">
-                        <span class="weather-forecast-temperature-max">18º</span>
-                        <span class="weather-forecast-temperature-min">12º</span>
-                    </div>
-                </div>
-            `;
-        }
-    })
-
-    /* nota: JS reconhece html - por isso dizemos que é possível injectar html diretamente de JS (JS Template - correct term for this). Por isso não reconhece comments quando os tentamos fazer na parte de html, como os <div>. 
-     Tivemos de incluir a classe na linha 84, para que ficasse tudo na mesma coluna (cada loop). Ou seja, os dados para cada dia. 
-        Isto porque estamos a usar a técnica display flex, que coloca a classe em que a aplicamos, como a linha (equivalente a "row" em Bootstrap - neste caso - a classe "weather-forecast" - html). 
-        E, depois, cada elemento, dentro desta classe, funciona como uma coluna (assim, como temos vários <div> cada um ficaria numa coluna diferente). Para isso, criamos a classe "day" que representa uma coluna (dentro da classe weather-forecast, aqui selecionada através do id).
-        E, colocamos todos os outros elementos, dentro desta classe. Assim, ficam todos dentro desta coluna. 
-        Como são block elements, é criada uma linha antes e após cada um - portanto, ficam em linhas diferentes (dentro da mesma coluna). 
-            Com excepção da img (que é inline). Mas, como está entre 2 block elements fica em linhas diferentes desses 2 <divs>.
-            Neste caso, colocamos as temperaturas max e min (como span, ficando dentro na mesma linha // lado-a-lado). Mas, poderíamos tê-las colocado em div elements. E, depois, do css file, colocávamos a classe superior (forecast-temperatures) como display:flex; justify:center; -> E teria exatamente o mesmo efeito;
-    */ 
-
+  }
+  
+  function formatDay(timestamp) {
+    let date = new Date(timestamp * 1000);
+    let days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  
+    return days[date.getDay()];
+  }
+  
+  function getForecast(city) {
+    let apiKey = "b2a5adcct04b33178913oc335f405433";
+    let apiUrl = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apiKey}&units=metric`;
+    axios(apiUrl).then(displayForecast);
+  }
+  
+  function displayForecast(response) {
+    let forecastHtml = "";
+  
+    response.data.daily.forEach(function (day, index) {
+      if (index < 5) {
+        forecastHtml =
+          forecastHtml +
+          `
+        <div class="weather-forecast-day">
+          <div class="weather-forecast-date">${formatDay(day.time)}</div>
+  
+          <img src="${day.condition.icon_url}" class="weather-forecast-icon" />
+          <div class="weather-forecast-temperatures">
+            <div class="weather-forecast-temperature">
+              <strong>${Math.round(day.temperature.maximum)}º</strong>
+            </div>
+            <div class="weather-forecast-temperature">${Math.round(
+              day.temperature.minimum
+            )}º</div>
+          </div>
+        </div>
+      `;
+      }
+    });
+  
+    let forecastElement = document.querySelector("#forecast");
     forecastElement.innerHTML = forecastHtml;
-}
-
-displayForecast();
-
+  }
+  
+  let searchFormElement = document.querySelector("#search-form");
+  searchFormElement.addEventListener("submit", handleSearchSubmit);
+  
+  searchCity("Paris");
+  
