@@ -88,6 +88,8 @@ main {
 
 .weather-forecast {
   color: #000000;
+  display: flex;
+  justify-content: space-around;
 }
 
 .weather-forecast-date {
@@ -96,8 +98,14 @@ main {
   font-size: 16px;
 }
 
+.weather-forecast-icon {
+  width: 45px;
+}
+
 .weather-forecast-temperatures {
   font-size: 13px;
+  display: flex;
+  justify-content: center;
 }
 
 .weather-forecast-temperature-min {
